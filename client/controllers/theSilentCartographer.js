@@ -9,17 +9,19 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 		this.map = new google.maps.Map(document.getElementById('map'), {
 			center: {lat: -35.281, lng: 149.110},
-			zoom:   10
+			zoom:   12
 		});
 	},
 
-	addMarker: function(lat, lng, title) {
+	addMarker: function(lat, lng, title, icon) {
 		var myLatLng = {lat: lat, lng: lng};
 
 		var marker = new google.maps.Marker({
 			position: myLatLng,
 			map:      this.map,
 			title:    title,
+			clickable: true,
+			icon: icon
 		});
 
 		return marker;
@@ -51,6 +53,18 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		var d    = R * c; // Distance in km
 
 		return Math.floor(d * 1000); //metres
+	},
+
+	focus: function(marker, on){
+		this.map.panTo(marker.position);
+		this.map.setZoom(12);
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+
+		if (marker.timer) clearTimeout(marker.timer);
+
+		marker.timer = setTimeout(function(){
+			marker.setAnimation(null);
+		}, 2000);
 	}
 };
 
