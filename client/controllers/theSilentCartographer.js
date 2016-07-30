@@ -9,8 +9,8 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		this.$div.append("<div id='map'></div>");
 
 		this.map = new google.maps.Map(document.getElementById('map'), {
-		  center: {lat: -34.397, lng: 150.644},
-		  zoom: 8
+		  center: {lat: -35.281, lng: 149.110},
+		  zoom: 10
 		});
 	},
 
