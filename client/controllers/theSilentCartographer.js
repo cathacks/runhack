@@ -2,6 +2,8 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 	map: undefined,
 	runningCircle: undefined,
+	routeMarkers: [],
+	directionService: undefined,
 
 	init: function($div) {
 		this.$div = $div;
@@ -16,7 +18,9 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		this.geocoder = new google.maps.Geocoder();
 
 		this.drawingManager = new google.maps.drawing.DrawingManager();
-		this.drawingManager.setMap(map);
+		this.drawingManager.setMap(this.map);
+
+		this.directionService = new google.maps.DirectionsService();
 	},
 
 	addMarker: function(lat, lng, title, icon) {
@@ -85,7 +89,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 	},
 
 
-	focus: function(marker, on){
+	focus: function(marker){
 		this.map.panTo(marker.position);
 		this.map.setZoom(12);
 		marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -95,7 +99,44 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		marker.timer = setTimeout(function(){
 			marker.setAnimation(null);
 		}, 2000);
+
+		this.updateRoute(marker);
 	},
+
+	updateRoute: function(marker){
+		this.routeMarkers.push(marker);
+
+		if (this.routeMarkers.length < 2) return; // need start and end at least
+
+		var route = this.routeMarkers.slice(0);
+		route = route.map(function(marker){
+			return marker.getPosition();
+		});
+		var request = {
+			travelMode: google.maps.TravelMode.WALKING
+		};
+		request.origin = route.shift();
+		request.destination = route.pop();
+
+		if (route.length){
+			request.waypoints = route.map(function(latlng){
+				return {
+					location: latlng,
+					stopover: false
+				};
+			});
+		}
+
+		this.directionService.route(request, function(result, status){
+			console.log(result.routes[0].legs[0].distance.text, "route calculated");
+
+			var renderer = new google.maps.DirectionsRenderer({
+				directions: result,
+				map: this.map
+			});
+
+		}.bind(this));
+	}
 };
 
 

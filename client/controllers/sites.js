@@ -96,6 +96,11 @@ var sites = {
 			$list.append($li);
 
 			item.marker = theSilentCartographer.addMarker(item.lat, item.lng, item.label, item.icon);
+			item.marker.addListener('click', function(){
+				item.$li.trigger('click');
+			}.bind(this, item));
+			item.marker.item = item;
+
 			item.$li = $li;
 
 			this.lookup[itemKey] = item;
