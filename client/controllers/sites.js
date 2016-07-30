@@ -16,6 +16,10 @@ var sites = {
 		this.loadData();
 	},
 	loadData: function() {
+
+		var silentCarto = window.theSilentCartographer
+
+
 		var pubArt = 'https://www.data.act.gov.au/resource/s538-zqvb.json?$$app_token=vY4SluUWF98mpICqPqqkhBxGE';
 
 		var self = this;
@@ -23,14 +27,16 @@ var sites = {
 		$.get(pubArt, function(data, status, xhr) {
 			data = data.map(function(art) {
 				art.location = art.longitude.coordinates;
-				var lat      = art.location[1];
+				var lat      = -art.location[1];
 				var lng      = art.location[0];
 				console.log(art.title, art.suburb, lat, lng);
 
 				//interface
 				art.label = art.title;
-				art.lat   = art.location[1];
+				art.lat   = -art.location[1];
 				art.lng   = art.location[0];
+
+				silentCarto.addMarker(art.lat, art.lng, art.label);
 
 				return art;
 			});
