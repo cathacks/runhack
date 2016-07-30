@@ -8,6 +8,8 @@ var sites = {
 		this.$tablist.appendTo(this.$div);
 
 		this.loadData();
+
+		theSilentCartographer.change(this.refreshPanels.bind(this));
 	},
 	loadData: function() {
 		var tokenQ = '?$$app_token=vY4SluUWF98mpICqPqqkhBxGE';
@@ -27,8 +29,8 @@ var sites = {
 		$.get(graffiti + tokenQ, function(data, status, xhr) {
 			this.addPanel('Graffiti Sites', data.map(function(item) {
 				item.label = item.location;
-				item.lat   = item.latitude;
-				item.lng   = item.longitude;
+				item.lat   = parseFloat(item.latitude);
+				item.lng   = parseFloat(item.longitude);
 				return item;
 			}));
 		}.bind(this), 'json');
@@ -53,7 +55,7 @@ var sites = {
 		var $list = $body.find('ul');
 
 		data.map(function(item) {
-			var li = "<li class='list-group-item' data-lat='" + item.lat + "' data-lng='" + item.lng + "'>" + item.label + '</li>';
+			var li = "<li class='list-group-item site' data-lat='" + item.lat + "' data-lng='" + item.lng + "'>" + item.label + "<span class='distance badge'></span></li>";
 			$list.append(li);
 
 			theSilentCartographer.addMarker(item.lat, item.lng, item.label);
@@ -65,5 +67,34 @@ var sites = {
 		$panel.append($body);
 
 		$panel.appendTo(this.$tablist);
+
+		this.refreshPanels();
+	},
+
+	refreshPanels: function(){
+		this.$tablist.find('li.site').each(function(i,e){
+			var $e = $(e);
+
+			var lat = $e.data('lat');
+			var lng = $e.data('lng');
+
+			var dist = theSilentCartographer.calculateDistance(lat, lng);
+			$e.find('.badge.distance').text(dist + " m").data('distance', dist);
+		});
+
+		this.$tablist.find('ul').each(function(i,e){
+			var $ul = $(e);
+			var $li = $ul.children("li");
+
+			$li.detach().sort(function(a, b){
+				a = $(a).find('.badge.distance').data('distance');
+				b = $(b).find('.badge.distance').data('distance');
+
+				if (a > b) return 1;
+				if (b > a) return -1;
+				return 0;
+			});
+			$ul.append($li);
+		});
 	}
 };
