@@ -15,6 +15,9 @@ var sites = {
 		var tokenQ = '?$$app_token=vY4SluUWF98mpICqPqqkhBxGE';
 		var pubArt = 'https://www.data.act.gov.au/resource/s538-zqvb.json';
 		var graffiti = 'https://www.data.act.gov.au/resource/ppyi-zp42.json';
+		var drinking = 'https://www.data.act.gov.au/resource/8eg4-uskm.json';
+		var fitness = 'https://www.data.act.gov.au/resource/h4qc-3txc.json';
+		var bbq = 'https://www.data.act.gov.au/resource/n3b4-mm52.json';
 
 		//each item needs to have the following keys : label, lat and lng
 		$.get(pubArt + tokenQ, function(data, status, xhr) {
@@ -29,6 +32,33 @@ var sites = {
 		$.get(graffiti + tokenQ, function(data, status, xhr) {
 			this.addPanel('Graffiti Sites', data.map(function(item) {
 				item.label = item.location;
+				item.lat   = parseFloat(item.latitude);
+				item.lng   = parseFloat(item.longitude);
+				return item;
+			}));
+		}.bind(this), 'json');
+
+		$.get(drinking + tokenQ, function(data, status, xhr) {
+			this.addPanel('Drinking Fountains', data.map(function(item) {
+				item.label = item.location;
+				item.lat   = parseFloat(item.latitude);
+				item.lng   = parseFloat(item.longitude);
+				return item;
+			}));
+		}.bind(this), 'json');
+
+		$.get(fitness + tokenQ, function(data, status, xhr) {
+			this.addPanel('Fitness Equipment', data.map(function(item) {
+				item.label = item.type;
+				item.lat   = parseFloat(item.latitude);
+				item.lng   = parseFloat(item.longitude);
+				return item;
+			}));
+		}.bind(this), 'json');
+
+		$.get(bbq + tokenQ, function(data, status, xhr) {
+			this.addPanel('BBQs', data.map(function(item) {
+				item.label = item.location_description;
 				item.lat   = parseFloat(item.latitude);
 				item.lng   = parseFloat(item.longitude);
 				return item;
