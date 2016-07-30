@@ -41,6 +41,7 @@ var sites = {
 			}));
 		}.bind(this), 'json');
 
+		/*
 		$.get(drinking + tokenQ, function(data, status, xhr) {
 			this.addPanel('Drinking Fountains', data.map(function(item) {
 				item.label = item.location;
@@ -67,6 +68,7 @@ var sites = {
 				return item;
 			}));
 		}.bind(this), 'json');
+		*/
 	},
 
 	addPanel: function(title, data) {
