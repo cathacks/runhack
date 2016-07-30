@@ -1,5 +1,5 @@
 
-var theSilentCartographer = {
+var theSilentCartographer = {	//it's a Halo reference btw
 
 	map: undefined,
 
