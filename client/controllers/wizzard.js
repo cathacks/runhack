@@ -18,15 +18,18 @@ var wizzard = {
 			var addr = $("#goaddress").val();
 			var radius = parseInt($("#goradius").val());
 
-			geocoder = new google.maps.Geocoder();
-
-			geocoder.geocode( { 'address': addr}, function(results, status) {
+			theSilentCartographer.geocoder.geocode( { 'address': addr}, function(results, status) {
 			  if (status == 'OK') {
-				theSilentCartographer.map.setCenter(results[0].geometry.location);
+				// theSilentCartographer.map.setCenter(results[0].geometry.location);
+
+				theSilentCartographer.addSearchCircle(results[0].geometry.location, radius);
 				// var marker = new google.maps.Marker({
 				// 	map: map,
 				// 	position: results[0].geometry.location
 				// });
+
+
+
 			  } else {
 				alert('Geocode was not successful for the following reason: ' + status);
 			  }

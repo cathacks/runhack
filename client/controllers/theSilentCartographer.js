@@ -1,6 +1,7 @@
 var theSilentCartographer = {	//it's a Halo reference btw
 
 	map: undefined,
+	runningCircle: undefined,
 
 	init: function($div) {
 		this.$div = $div;
@@ -11,6 +12,11 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			center: {lat: -35.281, lng: 149.110},
 			zoom:   12
 		});
+
+		this.geocoder = new google.maps.Geocoder();
+
+		this.drawingManager = new google.maps.drawing.DrawingManager();
+		this.drawingManager.setMap(map);
 	},
 
 	addMarker: function(lat, lng, title, icon) {
@@ -55,6 +61,30 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		return Math.floor(d * 1000); //metres
 	},
 
+	addSearchCircle: function(loc, radius) {
+
+		this.map.setCenter(loc);
+
+		if (this.runningCircle) {
+			this.runningCircle.setMap(null);
+			this.runningCircle = undefined;
+		}
+
+
+		this.runningCircle = new google.maps.Circle({
+			strokeColor: '#FF0000',
+			strokeOpacity: 0.8,
+			strokeWeight: 2,
+			fillColor: '#FF0000',
+			fillOpacity: 0.35,
+			map: this.map,
+			center: loc,
+			radius: radius * 1000
+		  });
+
+	},
+
+
 	focus: function(marker, on){
 		this.map.panTo(marker.position);
 		this.map.setZoom(12);
@@ -65,7 +95,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		marker.timer = setTimeout(function(){
 			marker.setAnimation(null);
 		}, 2000);
-	}
+	},
 };
 
 
