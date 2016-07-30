@@ -1,4 +1,6 @@
 var sites = {
+	lookup: {},
+
 	init:     function($div) {
 		this.$div = $div;
 		this.$div.append("<h3>Points of interest</h3>");
@@ -22,6 +24,7 @@ var sites = {
 				item.label = item.title;
 				item.lat   = -item.longitude.coordinates[1];
 				item.lng   = item.longitude.coordinates[0];
+				item.icon  = 'http://maps.google.com/mapfiles/ms/micons/green.png';
 				return item;
 			}));
 		}.bind(this), 'json');
@@ -54,13 +57,29 @@ var sites = {
 
 		var $list = $body.find('ul');
 
-		data.map(function(item) {
-			var li = "<li class='list-group-item site' data-lat='" + item.lat + "' data-lng='" + item.lng + "'>" + item.label + "<span class='distance badge'></span></li>";
-			$list.append(li);
+		data.map(function(item, index) {
+			var itemKey = key + index;
 
-			theSilentCartographer.addMarker(item.lat, item.lng, item.label);
+			var $li = $("<li class='list-group-item site' data-key='" + itemKey + "' data-lat='" + item.lat + "' data-lng='" + item.lng + "'><span class='item'>" + item.label + "</span><span class='distance badge'></span></li>");
+			$list.append($li);
+
+			item.marker = theSilentCartographer.addMarker(item.lat, item.lng, item.label, item.icon);
+			item.$li = $li;
+
+			this.lookup[itemKey] = item;
 
 			return item;
+		}.bind(this));
+
+		$body.on('click', 'li.site', function(){
+			var $li = $(this);
+			var itemKey = $li.data('key');
+			var item = sites.lookup[itemKey];
+
+			$li.toggleClass('active');
+			if ($li.hasClass('active')) {
+				theSilentCartographer.focus(item.marker);
+			}
 		});
 
 		$panel.append(heading);
@@ -95,6 +114,8 @@ var sites = {
 				return 0;
 			});
 			$ul.append($li);
+
+			$ul.parent().scrollTop(0);
 		});
 	}
 };
