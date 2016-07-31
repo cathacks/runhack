@@ -4,7 +4,7 @@ var sites = {
 	init:     function($div) {
 		this.$div = $div;
 		this.$div.append("<h3>Points of interest</h3>");
-		this.$div.css('min-height', '400px').css('border', '1px solid black');
+		this.$div.css('min-height', '400px'); //.css('border', '1px solid black');
 
 		this.$tablist = $("<div class='panel-group' id='typelist' role='tablist'></div>");
 		this.$tablist.appendTo(this.$div);

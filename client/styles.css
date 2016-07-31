@@ -5,7 +5,8 @@ h1 {
 }
 
 body {
-	margin: 2em;
+	/* margin: 2em; */
+ 	margin-bottom: 60px;
 }
 
 #map {
@@ -28,4 +29,36 @@ body {
 	position: absolute;
 	top: 10px;
 	right: 10px;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+#header {
+  	background-image: linear-gradient( 90deg, #4B0082, #800080 );
+  	padding: 2em;
+}
+
+#footer {
+	background-color: #2a2730;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	color: #ffffff;
+	position: absolute;
+  	bottom: 0;
+  	width: 100%;
+	height: 60px;
+	text-align: right;
+}
+
+#footer img {
+	position: absolute;
+	vertical-align: bottom;
+	display: block;
+
+}
+
+.nav-pills > li.active > a {
+    color: red;
 }
