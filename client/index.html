@@ -22,7 +22,24 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-3 controller" id="wizzard"></div>
+		<div class="col-md-3 controller" style="height:400px" id="wizzard">
+
+      <h3>Wizzard</h3>
+
+        <form>
+          <div class="form-group">
+            <label for="startAddress">Start Address</label>
+            <input type="text" class="form-control" id="startaddress" placeholder="Parliament House, ACT">
+          </div>
+          <div class="checkbox">
+            <label>
+              <input id="loopaddress" type="checkbox"> Loop
+            </label>
+          </div>
+          <button type="button" id="gobutton" class="btn btn-default">Submit</button>
+        </form>
+
+    </div>
 		<div class="col-md-6 controller" id="theSilentCartographer"></div>
 		<div class="col-md-3 controller" id="sites"></div>
 	</div>
