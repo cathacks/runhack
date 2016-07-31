@@ -20,6 +20,7 @@ var sites = {
 		var drinking = 'https://www.data.act.gov.au/resource/8eg4-uskm.json';
 		var fitness = 'https://www.data.act.gov.au/resource/h4qc-3txc.json';
 		var bbq = 'https://www.data.act.gov.au/resource/n3b4-mm52.json';
+		var toiletMachines = 'https://www.data.act.gov.au/resource/3tyf-txjn.json';
 
 		//each item needs to have the following keys : label, lat and lng
 		$.get(pubArt + tokenQ, function(data, status, xhr) {
@@ -41,12 +42,12 @@ var sites = {
 			}));
 		}.bind(this), 'json');
 
-		/*
 		$.get(drinking + tokenQ, function(data, status, xhr) {
 			this.addPanel('Drinking Fountains', data.map(function(item) {
 				item.label = item.location;
 				item.lat   = parseFloat(item.latitude);
 				item.lng   = parseFloat(item.longitude);
+				item.icon = "http://maps.google.com/mapfiles/ms/micons/drinking_water.png"
 				return item;
 			}));
 		}.bind(this), 'json');
@@ -56,6 +57,7 @@ var sites = {
 				item.label = item.type;
 				item.lat   = parseFloat(item.latitude);
 				item.lng   = parseFloat(item.longitude);
+				item.icon = "http://maps.google.com/mapfiles/ms/micons/sportvenue.png"
 				return item;
 			}));
 		}.bind(this), 'json');
@@ -65,10 +67,20 @@ var sites = {
 				item.label = item.location_description;
 				item.lat   = parseFloat(item.latitude);
 				item.lng   = parseFloat(item.longitude);
+				item.icon = "http://maps.google.com/mapfiles/ms/micons/picnic.png";
 				return item;
 			}));
 		}.bind(this), 'json');
-		*/
+
+		$.get(toiletMachines + tokenQ, function(data, status, xhr) {
+			this.addPanel('Toilets', data.map(function(item) {
+				item.label = item.location_description;
+				item.lat   = parseFloat(item.latitude);
+				item.lng   = parseFloat(item.longitude);
+				item.icon  = 'http://maps.google.com/mapfiles/ms/micons/toilets.png';
+				return item;
+			}));
+		}.bind(this), 'json');
 	},
 
 	addPanel: function(title, data) {

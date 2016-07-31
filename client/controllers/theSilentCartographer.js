@@ -1,13 +1,13 @@
 var theSilentCartographer = {	//it's a Halo reference btw
 
-	map: undefined,
-	runningCircle: undefined,
-	routeMarkers: [],
-	directionService: undefined,
-	elevationService: undefined,
+	map:               undefined,
+	runningCircle:     undefined,
+	routeMarkers:      [],
+	directionService:  undefined,
+	elevationService:  undefined,
 	directionRenderer: undefined,
-	startLoc: undefined,
-	loopRoute: false,
+	startLoc:          undefined,
+	loopRoute:         false,
 
 	init: function($div) {
 		this.$div = $div;
@@ -26,20 +26,18 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 		this.directionService = new google.maps.DirectionsService();
 		this.elevationService = new google.maps.ElevationService();
-		this.directionRenderer = new google.maps.DirectionsRenderer({
-			map: this.map
-		});
+
 	},
 
 	addMarker: function(lat, lng, title, icon) {
 		var myLatLng = {lat: lat, lng: lng};
 
 		var marker = new google.maps.Marker({
-			position: myLatLng,
-			map:      this.map,
-			title:    title,
+			position:  myLatLng,
+			map:       this.map,
+			title:     title,
 			clickable: true,
-			icon: icon
+			icon:      icon
 		});
 
 		return marker;
@@ -55,14 +53,14 @@ var theSilentCartographer = {	//it's a Halo reference btw
 	 * @param lng
 	 * @return int distance in metres
 	 */
-	distanceFromCenter: function(lat, lng){
+	distanceFromCenter: function(lat, lng) {
 		var mapLat = this.map.center.lat();
 		var mapLng = this.map.center.lng();
 
 		return this.calculateDistance(lat, lng, mapLat, mapLng);
 	},
 
-	calculateDistance: function(latA, lngA, latB, lngB){
+	calculateDistance: function(latA, lngA, latB, lngB) {
 		if (latA.lat && lngA.lat) {
 			var posA = latA;
 			var posB = lngA;
@@ -99,27 +97,27 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 
 		this.runningCircle = new google.maps.Circle({
-			strokeColor: '#FF0000',
+			strokeColor:   '#FF0000',
 			strokeOpacity: 0.8,
-			strokeWeight: 2,
-			fillColor: '#FF0000',
-			fillOpacity: 0.35,
-			map: this.map,
-			center: loc,
-			radius: radius * 1000
-		  });
+			strokeWeight:  2,
+			fillColor:     '#FF0000',
+			fillOpacity:   0.35,
+			map:           this.map,
+			center:        loc,
+			radius:        radius * 1000
+		});
 
 	},
 
 
-	focus: function(marker){
+	focus: function(marker) {
 		this.map.panTo(marker.position);
 		this.map.setZoom(12);
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 
 		if (marker.timer) clearTimeout(marker.timer);
 
-		marker.timer = setTimeout(function(){
+		marker.timer = setTimeout(function() {
 			marker.setAnimation(null);
 		}, 2000);
 
@@ -137,32 +135,34 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		this.loopRoute = val;
 	},
 
-	updateRoute: function(marker){
+	updateRoute: function(marker) {
 		if (marker) {
 			this.routeMarkers.push(marker);
 		}
 
 		var route = this.routeMarkers.slice(0);
-		route = route.map(function(marker){
+		route     = route.map(function(marker) {
 			return marker.getPosition();
 		});
 		if (this.startLoc) {
 			route.unshift(this.startLoc);
 		}
 		if (this.loopRoute) {
-			route.push(this.startLoc);
+			if (route.length > 0) {
+				route.push(route[0]);
+			}
 		}
 
 		if (this.routeMarkers.length < 2) return; // need start and end at least
-		
-		var request = {
+
+		var request         = {
 			travelMode: google.maps.TravelMode.WALKING
 		};
-		request.origin = route.shift();
+		request.origin      = route.shift();
 		request.destination = route.pop();
 
-		if (route.length){
-			request.waypoints = route.map(function(latlng){
+		if (route.length) {
+			request.waypoints = route.map(function(latlng) {
 				return {
 					location: latlng,
 					stopover: false
@@ -170,8 +170,8 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			});
 		}
 
-		this.directionService.route(request, function(result, status){
-			if (status !== 'OK'){
+		this.directionService.route(request, function(result, status) {
+			if (status !== 'OK') {
 				console.log("Problem calculating route :(", result, status, request);
 				return;
 			}
@@ -180,16 +180,23 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			console.log(route);
 			console.log(route.legs[0].distance.text, "route calculated");
 
-			this.directionRenderer.setMap(null);
-			this.directionRenderer = new google.maps.DirectionsRenderer({
-				map: this.map,
-				directions: result
-			});
-			this.elevationService.getElevationAlongPath({path: route.overview_path, samples: 512}, function(results, status){
-				if (status != 'OK' || !results || !results.length) return;
+			if (this.directionRenderer) {
+				this.directionRenderer.setMap(null);
+				this.directionRenderer = undefined;
 
-				rundata.drawElevation(results, this.routeMarkers);
-			}.bind(this));
+			}
+
+			this.directionRenderer = new google.maps.DirectionsRenderer({
+				map: this.map
+			});
+			this.directionRenderer.setDirections(result);
+			this.elevationService.getElevationAlongPath(
+				{path: route.overview_path, samples: route.overview_path.length},
+				function(results, status) {
+					if (status != 'OK' || !results || !results.length) return;
+
+					rundata.drawElevation(results, this.routeMarkers);
+				}.bind(this));
 
 		}.bind(this));
 	},
