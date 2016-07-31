@@ -5,6 +5,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 	routeMarkers: [],
 	directionService: undefined,
 	elevationService: undefined,
+	directionRenderer: undefined,
 	startLoc: undefined,
 	loopRoute: false,
 
@@ -25,6 +26,9 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 		this.directionService = new google.maps.DirectionsService();
 		this.elevationService = new google.maps.ElevationService();
+		this.directionRenderer = new google.maps.DirectionsRenderer({
+			map: this.map
+		});
 	},
 
 	addMarker: function(lat, lng, title, icon) {
@@ -167,16 +171,17 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		}
 
 		this.directionService.route(request, function(result, status){
+			if (status !== 'OK'){
+				console.log("Problem calculating route :(", result, status, request);
+				return;
+			}
+
 			var route = result.routes[0];
 			console.log(route);
 			console.log(route.legs[0].distance.text, "route calculated");
 
-			var renderer = new google.maps.DirectionsRenderer({
-				directions: result,
-				map: this.map
-			});
-
-			this.elevationService.getElevationAlongPath({path: route.overview_path, samples: 50}, function(results, status){
+			this.directionRenderer.setDirections(result);
+			this.elevationService.getElevationAlongPath({path: route.overview_path, samples: route.overview_path.length}, function(results, status){
 				if (status != 'OK' || !results || !results.length) return;
 
 				rundata.drawElevation(results, this.routeMarkers);

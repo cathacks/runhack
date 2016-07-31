@@ -53,19 +53,15 @@ var rundata = {
 			var desc = null;
 
 			if (i == 0){
-				console.log("EYE ZERO");
 				anno = alpha[p++];
 				desc = first.label;
-				console.log(anno, desc, p, pt, first);
 			} else if (i == (results.length-1)){
 				anno = alpha[p++];
 				desc = last.label;
-			} else if (markerLookup[key]) {
+			} else if (markerLookup[key] && !markerLookup[key].used) {
 				anno = alpha[p++];
 				desc = markerLookup[key].label;
-			}
-			if (anno){
-				console.log(i, dist, pt, anno, desc);
+				markerLookup[key].used = true;
 			}
 			data.addRow([Math.round(dist), Math.round(pt.elevation), anno, desc]);
 

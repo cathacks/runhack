@@ -7,7 +7,7 @@ var app = {
 		$('.controller').each(function(i,e){
 			var $el = $(e);
 			var id = $el.attr('id');
-			app.loadController(id, $el);
+			app.loadController(id.replace('Page', ''), $el);
 		})
 	},
 	loadController: function(id, $el){
