@@ -6,10 +6,10 @@ var rundata = {
 	drawElevation: function(results, markers){
 		var markerLookup = {};
 
-		function dp2(num){
-			num = num * 100;
+		function dp4(num){
+			num = num * 1000;
 			num = Math.round(num);
-			num = num / 100;
+			num = num / 1000;
 			return num;
 		}
 
@@ -26,9 +26,8 @@ var rundata = {
 		var last = markers.pop().item;
 
 		markers.map(function(marker){
-			var key = [dp2(marker.position.lat()), dp2(marker.position.lng())].join('-');
+			var key = [dp4(marker.position.lat()), dp4(marker.position.lng())].join('-');
 			markerLookup[key] = $.extend({}, marker.item);
-			console.log(key, marker.item);
 		});
 
 
@@ -51,7 +50,7 @@ var rundata = {
 		var p = 0;
 		for (var i = 0; i < results.length; i++) {
 			var pt = results[i];
-			var key = [dp2(pt.location.lat()), dp2(pt.location.lng())].join('-');
+			var key = [dp4(pt.location.lat()), dp4(pt.location.lng())].join('-');
 
 			if (prev){
 				var diff = theSilentCartographer.calculateDistance(pt.location, prev.location);

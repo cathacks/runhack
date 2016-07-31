@@ -110,7 +110,9 @@ var theSilentCartographer = {	//it's a Halo reference btw
 	},
 
 
-	focus: function(marker) {
+	focus: function(marker, addToRoute) {
+		if (addToRoute === undefined) addToRoute = true;
+
 		this.map.panTo(marker.position);
 		this.map.setZoom(12);
 		marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -121,11 +123,15 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			marker.setAnimation(null);
 		}, 2000);
 
-		this.updateRoute(marker);
+		if (addToRoute) this.updateRoute(marker);
 	},
 
 	setStart: function(loc) {
-		this.startLoc = loc
+		if (this.startLoc && this.startLoc.marker) this.startLoc.marker.setMap(null);
+
+		this.startLoc = loc;
+		this.startLoc.marker = this.addMarker(this.startLoc.lat(), this.startLoc.lng(), this.startLoc.item.label, 'http://maps.google.com/mapfiles/ms/micons/flag.png');
+		this.focus(this.startLoc.marker, false);
 	},
 
 	// setEnd: function(loc) {
@@ -147,13 +153,14 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		if (this.startLoc) {
 			route.unshift(this.startLoc);
 		}
-		if (this.loopRoute) {
-			if (route.length > 0) {
-				route.push(route[0]);
-			}
-		}
 
-		if (this.routeMarkers.length < 2) return; // need start and end at least
+		console.log('update route', route);
+
+		if (route.length < 2) return; // need start and end at least
+
+		if (this.loopRoute) {
+			route.push(route[0]);
+		}
 
 		var request         = {
 			travelMode: google.maps.TravelMode.WALKING
