@@ -34,14 +34,16 @@ var wizzard = {
 
 				theSilentCartographer.geocoder.geocode( { 'address': startAddr}, function(results, status) {
 				  if (status == 'OK') {
-				  	theSilentCartographer.setStart(results[0].geometry.location);
+				  	var loc = results[0].geometry.location;
+				  	loc.label = startAddr;
+				  	theSilentCartographer.setStart(loc);
 				  } else {
 					alert('Geocode was not successful for the following reason: ' + status);
 				  }
 
 				  theSilentCartographer.updateRoute();
 				});
-				
+
 			}
 
 			// theSilentCartographer.geocoder.geocode( { 'address': endAddr}, function(results, status) {
