@@ -73,7 +73,7 @@ var sites = {
 		}.bind(this), 'json');
 
 		$.get(toiletMachines + tokenQ, function(data, status, xhr) {
-			this.addPanel('toiletMachines', data.map(function(item) {
+			this.addPanel('Toilets', data.map(function(item) {
 				item.label = item.location_description;
 				item.lat   = parseFloat(item.latitude);
 				item.lng   = parseFloat(item.longitude);
