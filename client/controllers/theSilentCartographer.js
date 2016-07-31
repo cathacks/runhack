@@ -148,7 +148,9 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			route.unshift(this.startLoc);
 		}
 		if (this.loopRoute) {
-			route.push(this.startLoc);
+			if (route.length > 0) {
+				route.push(route[0]);
+			}
 		}
 
 		if (this.routeMarkers.length < 2) return; // need start and end at least

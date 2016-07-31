@@ -25,24 +25,24 @@ var wizzard = {
 			var startAddr = $("#startaddress").val();
 			// var endAddr = $("#endaddress").val();
 
-			if (startAddr.trim().length <= 0) {
-				alert("Please enter an address.");
-				return;
-			}
-
 			var loopAddr = $("#loopaddress").is(':checked')
-
 			theSilentCartographer.setLoop(loopAddr);
-			
-			theSilentCartographer.geocoder.geocode( { 'address': startAddr}, function(results, status) {
-			  if (status == 'OK') {
-			  	theSilentCartographer.setStart(results[0].geometry.location);
-			  } else {
-				alert('Geocode was not successful for the following reason: ' + status);
-			  }
 
-			  theSilentCartographer.updateRoute();
-			});
+			if (startAddr.trim().length <= 0) {
+				theSilentCartographer.updateRoute();
+			} else {
+
+				theSilentCartographer.geocoder.geocode( { 'address': startAddr}, function(results, status) {
+				  if (status == 'OK') {
+				  	theSilentCartographer.setStart(results[0].geometry.location);
+				  } else {
+					alert('Geocode was not successful for the following reason: ' + status);
+				  }
+
+				  theSilentCartographer.updateRoute();
+				});
+				
+			}
 
 			// theSilentCartographer.geocoder.geocode( { 'address': endAddr}, function(results, status) {
 			//   if (status == 'OK') {
