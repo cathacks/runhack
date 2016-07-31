@@ -16,7 +16,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 		this.map = new google.maps.Map(document.getElementById('map'), {
 			center: {lat: -35.281, lng: 149.110},
-			zoom:   12
+			zoom:   14
 		});
 
 		this.geocoder = new google.maps.Geocoder();
@@ -31,6 +31,14 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 	addMarker: function(lat, lng, title, icon) {
 		var myLatLng = {lat: lat, lng: lng};
+
+//		var icon = {
+//			url: icon, // url
+//			scaledSize: new google.maps.Size(24, 24), // scaled size
+//			origin: new google.maps.Point(0,0), // origin
+//			anchor: new google.maps.Point(0, 0) // anchor
+//		};
+
 
 		var marker = new google.maps.Marker({
 			position:  myLatLng,
@@ -114,7 +122,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		if (addToRoute === undefined) addToRoute = true;
 
 		this.map.panTo(marker.position);
-		this.map.setZoom(12);
+		this.map.setZoom(14);
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 
 		if (marker.timer) clearTimeout(marker.timer);
@@ -167,6 +175,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		};
 		request.origin      = route.shift();
 		request.destination = route.pop();
+		request.optimizeWaypoints = true;
 
 		if (route.length) {
 			request.waypoints = route.map(function(latlng) {
@@ -184,8 +193,6 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			}
 
 			var route = result.routes[0];
-			console.log(route);
-			console.log(route.legs[0].distance.text, "route calculated");
 
 			if (this.directionRenderer) {
 				this.directionRenderer.setMap(null);
@@ -194,7 +201,8 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			}
 
 			this.directionRenderer = new google.maps.DirectionsRenderer({
-				map: this.map
+				map: this.map,
+				suppressMarkers: true
 			});
 			this.directionRenderer.setDirections(result);
 			this.elevationService.getElevationAlongPath(

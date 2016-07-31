@@ -14,12 +14,12 @@ var sites = {
 		theSilentCartographer.change(this.refreshPanels.bind(this));
 	},
 	loadData: function() {
-		var tokenQ = '?$$app_token=vY4SluUWF98mpICqPqqkhBxGE';
-		var pubArt = 'https://www.data.act.gov.au/resource/s538-zqvb.json';
-		var graffiti = 'https://www.data.act.gov.au/resource/ppyi-zp42.json';
-		var drinking = 'https://www.data.act.gov.au/resource/8eg4-uskm.json';
-		var fitness = 'https://www.data.act.gov.au/resource/h4qc-3txc.json';
-		var bbq = 'https://www.data.act.gov.au/resource/n3b4-mm52.json';
+		var tokenQ         = '?$$app_token=vY4SluUWF98mpICqPqqkhBxGE';
+		var pubArt         = 'https://www.data.act.gov.au/resource/s538-zqvb.json';
+		var graffiti       = 'https://www.data.act.gov.au/resource/ppyi-zp42.json';
+		var drinking       = 'https://www.data.act.gov.au/resource/8eg4-uskm.json';
+		var fitness        = 'https://www.data.act.gov.au/resource/h4qc-3txc.json';
+		var bbq            = 'https://www.data.act.gov.au/resource/n3b4-mm52.json';
 		var toiletMachines = 'https://www.data.act.gov.au/resource/3tyf-txjn.json';
 
 		//each item needs to have the following keys : label, lat and lng
@@ -28,7 +28,7 @@ var sites = {
 				item.label = item.title;
 				item.lat   = -item.longitude.coordinates[1];
 				item.lng   = item.longitude.coordinates[0];
-				item.icon  = 'http://maps.google.com/mapfiles/ms/micons/green.png';
+				item.icon  = 'http://maps.google.com/mapfiles/ms/micons/blue.png';
 				return item;
 			}));
 		}.bind(this), 'json');
@@ -47,7 +47,7 @@ var sites = {
 				item.label = item.location;
 				item.lat   = parseFloat(item.latitude);
 				item.lng   = parseFloat(item.longitude);
-				item.icon = "http://maps.google.com/mapfiles/ms/micons/drinking_water.png"
+				item.icon  = "http://maps.google.com/mapfiles/ms/micons/drinking_water.png"
 				return item;
 			}));
 		}.bind(this), 'json');
@@ -57,7 +57,7 @@ var sites = {
 				item.label = item.type;
 				item.lat   = parseFloat(item.latitude);
 				item.lng   = parseFloat(item.longitude);
-				item.icon = "http://maps.google.com/mapfiles/ms/micons/sportvenue.png"
+				item.icon  = "http://maps.google.com/mapfiles/ms/micons/sportvenue.png"
 				return item;
 			}));
 		}.bind(this), 'json');
@@ -67,7 +67,7 @@ var sites = {
 				item.label = item.location_description;
 				item.lat   = parseFloat(item.latitude);
 				item.lng   = parseFloat(item.longitude);
-				item.icon = "http://maps.google.com/mapfiles/ms/micons/picnic.png";
+				item.icon  = "http://maps.google.com/mapfiles/ms/micons/picnic.png";
 				return item;
 			}));
 		}.bind(this), 'json');
@@ -108,7 +108,7 @@ var sites = {
 			$list.append($li);
 
 			item.marker = theSilentCartographer.addMarker(item.lat, item.lng, item.label, item.icon);
-			item.marker.addListener('click', function(){
+			item.marker.addListener('click', function() {
 				item.$li.trigger('click');
 			}.bind(this, item));
 			item.marker.item = item;
@@ -120,10 +120,10 @@ var sites = {
 			return item;
 		}.bind(this));
 
-		$body.on('click', 'li.site', function(){
-			var $li = $(this);
+		$body.on('click', 'li.site', function() {
+			var $li     = $(this);
 			var itemKey = $li.data('key');
-			var item = sites.lookup[itemKey];
+			var item    = sites.lookup[itemKey];
 
 			$li.toggleClass('active');
 			if ($li.hasClass('active')) {
@@ -139,8 +139,8 @@ var sites = {
 		this.refreshPanels();
 	},
 
-	refreshPanels: function(){
-		this.$tablist.find('li.site').each(function(i,e){
+	refreshPanels: function() {
+		this.$tablist.find('li.site').each(function(i, e) {
 			var $e = $(e);
 
 			var lat = $e.data('lat');
@@ -150,11 +150,11 @@ var sites = {
 			$e.find('.badge.distance').text(dist + " m").data('distance', dist);
 		});
 
-		this.$tablist.find('ul').each(function(i,e){
+		this.$tablist.find('ul').each(function(i, e) {
 			var $ul = $(e);
 			var $li = $ul.children("li");
 
-			$li.detach().sort(function(a, b){
+			$li.detach().sort(function(a, b) {
 				a = $(a).find('.badge.distance').data('distance');
 				b = $(b).find('.badge.distance').data('distance');
 
