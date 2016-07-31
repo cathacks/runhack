@@ -25,6 +25,11 @@ var wizzard = {
 			var startAddr = $("#startaddress").val();
 			// var endAddr = $("#endaddress").val();
 
+			if (startAddr.trim().length <= 0) {
+				alert("Please enter an address.");
+				return;
+			}
+
 			var loopAddr = $("#loopaddress").is(':checked')
 
 			theSilentCartographer.setLoop(loopAddr);
