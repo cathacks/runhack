@@ -37,18 +37,18 @@ body {
 
 #header {
   	background-image: linear-gradient( 90deg, #4B0082, #800080 );
-  	padding: 2em;
+  	padding: 1em;
 }
 
 #footer {
 	background-color: #2a2730;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	color: #ffffff;
 	position: absolute;
   	bottom: 0;
   	width: 100%;
-	height: 60px;
+	height: 50px;
 	text-align: right;
 }
 
@@ -56,9 +56,4 @@ body {
 	position: absolute;
 	vertical-align: bottom;
 	display: block;
-
-}
-
-.nav-pills > li.active > a {
-    color: red;
 }
