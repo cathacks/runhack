@@ -7,7 +7,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 	init: function($div) {
 		this.$div = $div;
-		this.$div.css('height', '400px').css('border', '1px solid black');
+		this.$div.css('height', '400px'); //.css('border', '1px solid black');
 		this.$div.append("<div id='map'></div>");
 
 		this.map = new google.maps.Map(document.getElementById('map'), {
