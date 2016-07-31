@@ -35,7 +35,8 @@ var wizzard = {
 				theSilentCartographer.geocoder.geocode( { 'address': startAddr}, function(results, status) {
 				  if (status == 'OK') {
 				  	var loc = results[0].geometry.location;
-				  	loc.label = startAddr;
+				  	loc.item = {label: startAddr};
+
 				  	theSilentCartographer.setStart(loc);
 				  } else {
 					alert('Geocode was not successful for the following reason: ' + status);
