@@ -4,6 +4,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 	runningCircle: undefined,
 	routeMarkers: [],
 	directionService: undefined,
+	elevationService: undefined,
 
 	init: function($div) {
 		this.$div = $div;
@@ -21,6 +22,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		this.drawingManager.setMap(this.map);
 
 		this.directionService = new google.maps.DirectionsService();
+		this.elevationService = new google.maps.ElevationService();
 	},
 
 	addMarker: function(lat, lng, title, icon) {
@@ -128,12 +130,20 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		}
 
 		this.directionService.route(request, function(result, status){
-			console.log(result.routes[0].legs[0].distance.text, "route calculated");
+			var route = result.routes[0];
+			console.log(route);
+			console.log(route.legs[0].distance.text, "route calculated");
 
 			var renderer = new google.maps.DirectionsRenderer({
 				directions: result,
 				map: this.map
 			});
+
+			this.elevationService.getElevationAlongPath({path: route.overview_path, samples: 256}, function(results, status){
+				if (status != 'OK' || !results || !results.length) return;
+
+				footer.drawElevation(results);
+			})
 
 		}.bind(this));
 	}
