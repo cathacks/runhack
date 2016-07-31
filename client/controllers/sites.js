@@ -134,7 +134,7 @@ var sites = {
 			var lat = $e.data('lat');
 			var lng = $e.data('lng');
 
-			var dist = theSilentCartographer.calculateDistance(lat, lng);
+			var dist = Math.floor(theSilentCartographer.distanceFromCenter(lat, lng));
 			$e.find('.badge.distance').text(dist + " m").data('distance', dist);
 		});
 

@@ -4,6 +4,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 	runningCircle: undefined,
 	routeMarkers: [],
 	directionService: undefined,
+	elevationService: undefined,
 	startLoc: undefined,
 	loopRoute: false,
 
@@ -23,6 +24,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		this.drawingManager.setMap(this.map);
 
 		this.directionService = new google.maps.DirectionsService();
+		this.elevationService = new google.maps.ElevationService();
 	},
 
 	addMarker: function(lat, lng, title, icon) {
@@ -49,22 +51,37 @@ var theSilentCartographer = {	//it's a Halo reference btw
 	 * @param lng
 	 * @return int distance in metres
 	 */
-	calculateDistance: function(lat, lng){
+	distanceFromCenter: function(lat, lng){
 		var mapLat = this.map.center.lat();
 		var mapLng = this.map.center.lng();
 
+		return this.calculateDistance(lat, lng, mapLat, mapLng);
+	},
+
+	calculateDistance: function(latA, lngA, latB, lngB){
+		if (latA.lat && lngA.lat) {
+			var posA = latA;
+			var posB = lngA;
+
+			latA = posA.lat();
+			lngA = posA.lng();
+
+			latB = posB.lat();
+			lngB = posB.lng();
+		}
+
 		var R    = 6371; // Radius of the earth in km
-		var dLat = deg2rad(mapLat - lat);  // deg2rad below
-		var dLon = deg2rad(mapLng - lng);
+		var dLat = deg2rad(latA - latB);  // deg2rad below
+		var dLon = deg2rad(lngA - lngB);
 		var a    =
 				Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-				Math.cos(deg2rad(mapLat)) * Math.cos(deg2rad(lat)) *
+				Math.cos(deg2rad(latA)) * Math.cos(deg2rad(latB)) *
 				Math.sin(dLon / 2) * Math.sin(dLon / 2)
 			;
 		var c    = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		var d    = R * c; // Distance in km
 
-		return Math.floor(d * 1000); //metres
+		return d * 1000; //metres
 	},
 
 	addSearchCircle: function(loc, radius) {
@@ -150,12 +167,20 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		}
 
 		this.directionService.route(request, function(result, status){
-			console.log(result.routes[0].legs[0].distance.text, "route calculated");
+			var route = result.routes[0];
+			console.log(route);
+			console.log(route.legs[0].distance.text, "route calculated");
 
 			var renderer = new google.maps.DirectionsRenderer({
 				directions: result,
 				map: this.map
 			});
+
+			this.elevationService.getElevationAlongPath({path: route.overview_path, samples: 50}, function(results, status){
+				if (status != 'OK' || !results || !results.length) return;
+
+				rundata.drawElevation(results, this.routeMarkers);
+			}.bind(this));
 
 		}.bind(this));
 	},
