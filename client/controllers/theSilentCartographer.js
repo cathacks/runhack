@@ -4,6 +4,8 @@ var theSilentCartographer = {	//it's a Halo reference btw
 	runningCircle: undefined,
 	routeMarkers: [],
 	directionService: undefined,
+	startLoc: undefined,
+	loopRoute: false,
 
 	init: function($div) {
 		this.$div = $div;
@@ -103,15 +105,35 @@ var theSilentCartographer = {	//it's a Halo reference btw
 		this.updateRoute(marker);
 	},
 
-	updateRoute: function(marker){
-		this.routeMarkers.push(marker);
+	setStart: function(loc) {
+		this.startLoc = loc
+	},
 
-		if (this.routeMarkers.length < 2) return; // need start and end at least
+	// setEnd: function(loc) {
+	// },
+
+	setLoop: function(val) {
+		this.loopRoute = val;
+	},
+
+	updateRoute: function(marker){
+		if (marker) {
+			this.routeMarkers.push(marker);
+		}
 
 		var route = this.routeMarkers.slice(0);
 		route = route.map(function(marker){
 			return marker.getPosition();
 		});
+		if (this.startLoc) {
+			route.unshift(this.startLoc);
+		}
+		if (this.loop) {
+			route.push(this.startLoc);
+		}
+
+		if (this.routeMarkers.length < 2) return; // need start and end at least
+		
 		var request = {
 			travelMode: google.maps.TravelMode.WALKING
 		};
@@ -136,7 +158,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			});
 
 		}.bind(this));
-	}
+	},
 };
 
 
