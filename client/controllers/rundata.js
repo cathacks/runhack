@@ -6,10 +6,10 @@ var rundata = {
 	drawElevation: function(results, markers){
 		var markerLookup = {};
 
-		function dp5(num){
-			num = num * 1000;
+		function dp2(num){
+			num = num * 100;
 			num = Math.round(num);
-			num = num / 1000;
+			num = num / 100;
 			return num;
 		}
 
@@ -18,9 +18,10 @@ var rundata = {
 		var last = markers.pop().item;
 
 		markers.map(function(marker){
-			var key = [dp5(marker.position.lat()), dp5(marker.position.lng())].join('-');
-			markerLookup[key] = marker.item;
-		})
+			var key = [dp2(marker.position.lat()), dp2(marker.position.lng())].join('-');
+			markerLookup[key] = $.extend({}, marker.item);
+			console.log(key, marker.item);
+		});
 
 
 		// Create a new chart in the elevation_chart DIV.
@@ -42,7 +43,7 @@ var rundata = {
 		var p = 0;
 		for (var i = 0; i < results.length; i++) {
 			var pt = results[i];
-			var key = [dp5(pt.location.lat()), dp5(pt.location.lng())].join('-');;
+			var key = [dp2(pt.location.lat()), dp2(pt.location.lng())].join('-');
 
 			if (prev){
 				var diff = theSilentCartographer.calculateDistance(pt.location, prev.location);
@@ -67,9 +68,7 @@ var rundata = {
 
 			prev = pt;
 		}
-
 		console.log('total distance', dist);
-		console.log('lookups', markerLookup, first, last);
 
 		// Draw the chart using the data within its DIV.
 		chart.draw(data, {

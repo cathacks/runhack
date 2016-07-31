@@ -180,8 +180,12 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			console.log(route);
 			console.log(route.legs[0].distance.text, "route calculated");
 
-			this.directionRenderer.setDirections(result);
-			this.elevationService.getElevationAlongPath({path: route.overview_path, samples: route.overview_path.length}, function(results, status){
+			this.directionRenderer.setMap(null);
+			this.directionRenderer = new google.maps.DirectionsRenderer({
+				map: this.map,
+				directions: result
+			});
+			this.elevationService.getElevationAlongPath({path: route.overview_path, samples: 512}, function(results, status){
 				if (status != 'OK' || !results || !results.length) return;
 
 				rundata.drawElevation(results, this.routeMarkers);
