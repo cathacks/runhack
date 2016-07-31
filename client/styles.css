@@ -9,23 +9,23 @@ body {
  	margin-bottom: 60px;
 }
 
-#map {
+#mapPage {
 	height: 100%;
 }
 
-#sites div.panel-body {
+#sitesPage div.panel-body {
 	padding: 0;
 	overflow-y: scroll;
 	max-height: 300px;
 }
 
-#sites div.panel-body li span.item {
+#sitesPage div.panel-body li span.item {
 	max-width: 75%;
 	display: inline-block;
 }
 
 
-#sites div.panel-body li span.distance {
+#sitesPage div.panel-body li span.distance {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -35,12 +35,12 @@ body {
     padding: 0;
 }
 
-#header {
+#headerPage {
   	background-image: linear-gradient( 90deg, #4B0082, #800080 );
   	padding: 1em;
 }
 
-#footer {
+#footerPage {
 	background-color: #2a2730;
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -52,7 +52,7 @@ body {
 	text-align: right;
 }
 
-#footer img {
+#footerPage img {
 	position: absolute;
 	vertical-align: bottom;
 	display: block;
