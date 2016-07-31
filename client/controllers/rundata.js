@@ -14,6 +14,14 @@ var rundata = {
 		}
 
 		markers = markers.slice(0);
+
+		if (theSilentCartographer.startLoc) {
+			markers.unshift(theSilentCartographer.startLoc);
+		}
+		if (theSilentCartographer.loopRoute) {
+			markers.push(markers[0]);
+		}
+
 		var first = markers.shift().item;
 		var last = markers.pop().item;
 
