@@ -20,8 +20,8 @@ var theSilentCartographer = {	//it's a Halo reference btw
 
 		this.geocoder = new google.maps.Geocoder();
 
-		this.drawingManager = new google.maps.drawing.DrawingManager();
-		this.drawingManager.setMap(this.map);
+		// this.drawingManager = new google.maps.drawing.DrawingManager();
+		// this.drawingManager.setMap(this.map);
 
 		this.directionService = new google.maps.DirectionsService();
 		this.elevationService = new google.maps.ElevationService();
