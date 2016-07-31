@@ -179,7 +179,7 @@ var theSilentCartographer = {	//it's a Halo reference btw
 			this.elevationService.getElevationAlongPath({path: route.overview_path, samples: 50}, function(results, status){
 				if (status != 'OK' || !results || !results.length) return;
 
-				footer.drawElevation(results, this.routeMarkers);
+				rundata.drawElevation(results, this.routeMarkers);
 			}.bind(this));
 
 		}.bind(this));
